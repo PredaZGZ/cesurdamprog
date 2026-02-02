@@ -13,10 +13,10 @@ public class Ruleta {
     public final String NEGRO = "NEGRO";
 
     private double saldo;
-    private int ultimoNumero; // Almacena el último número sorteado
+    private int ultimoNumero; // Almacena el último número aleatorio
 
     public Ruleta(double saldo) {
-        this.saldo = this.setSaldo(saldo);
+        this.setSaldo(saldo);
     }
 
     public double getSaldo() {
@@ -28,11 +28,11 @@ public class Ruleta {
         return ultimoNumero;
     }
 
-    public double setSaldo(double saldo) {
-        if (saldo < 0) {
-            return 0;
+    public void setSaldo(double saldo) {
+        if (saldo <= 0) {
+            throw new IllegalArgumentException("El saldo debe ser mayor que 0");
         }
-        return saldo;
+        this.saldo = saldo;
     }
 
     // Genera el número aleatorio y actualiza el estado
@@ -58,8 +58,11 @@ public class Ruleta {
         return numero % 2 == 0;
     }
 
-    public boolean apostarNumero(int numero, double cantidad) {
-        if (cantidad > this.saldo || numero < 0 || numero > 36)
+    public boolean apostarNumero(int numero, double cantidad) throws SaldoInsuficienteException {
+        if (cantidad > this.saldo) {
+            throw new SaldoInsuficienteException("No tienes suficiente saldo para realizar esta apuesta.");
+        }
+        if (numero < 0 || numero > 36)
             return false;
 
         this.saldo -= cantidad;
@@ -72,9 +75,10 @@ public class Ruleta {
         return false;
     }
 
-    public boolean apostarColor(String color, double cantidad) {
-        if (cantidad > this.saldo)
-            return false;
+    public boolean apostarColor(String color, double cantidad) throws SaldoInsuficienteException {
+        if (cantidad > this.saldo) {
+            throw new SaldoInsuficienteException("No tienes suficiente saldo para realizar esta apuesta.");
+        }
         color = color.toUpperCase();
         if (!color.equals(ROJO) && !color.equals(NEGRO))
             return false;
@@ -89,9 +93,10 @@ public class Ruleta {
         return false;
     }
 
-    public boolean apostarParidad(String paridad, double cantidad) {
-        if (cantidad > this.saldo)
-            return false;
+    public boolean apostarParidad(String paridad, double cantidad) throws SaldoInsuficienteException {
+        if (cantidad > this.saldo) {
+            throw new SaldoInsuficienteException("No tienes suficiente saldo para realizar esta apuesta.");
+        }
         paridad = paridad.toUpperCase();
         if (!paridad.equals("PAR") && !paridad.equals("IMPAR"))
             return false;
@@ -106,8 +111,11 @@ public class Ruleta {
         return false;
     }
 
-    public boolean apostarDocena(int docena, double cantidad) {
-        if (cantidad > this.saldo || docena < 1 || docena > 3)
+    public boolean apostarDocena(int docena, double cantidad) throws SaldoInsuficienteException {
+        if (cantidad > this.saldo) {
+            throw new SaldoInsuficienteException("No tienes suficiente saldo para realizar esta apuesta.");
+        }
+        if (docena < 1 || docena > 3)
             return false;
 
         this.saldo -= cantidad;
