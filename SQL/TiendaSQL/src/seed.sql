@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS tienda;
+
+USE tienda;
+
+CREATE TABLE IF NOT EXISTS productos (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	nombre VARCHAR(255),
+	precio DECIMAL(7,2),
+	stock INT
+);
